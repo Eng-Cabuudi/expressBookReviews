@@ -1,0 +1,35 @@
+﻿curl.exe -i -sS -b cookies.txt -X PUT "http://localhost:5000/customer/auth/review/1?review=First%20review"
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 40
+ETag: W/"28-uvfTDjAqZIg1ALeqw5KKeiGF3uM"
+Date: Mon, 26 Oct 2026 13:20:27 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"message":"Review added successfully."}
+
+curl.exe -i -sS -b cookies.txt -X PUT "http://localhost:5000/customer/auth/review/1?review=Updated%20review"
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 42
+ETag: W/"2a-4ltRStnXGvYgpMzkp8FC3VGClbE"
+Date: Mon, 26 Oct 2026 13:20:27 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"message":"Review updated successfully."}
+
+curl.exe -i -sS http://localhost:5000/review/1
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 29
+ETag: W/"1d-9DH5iEoxyaw8oTBJ//sDIQXMfBI"
+Date: Mon, 26 Oct 2026 13:20:27 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"student2":"Updated review"}

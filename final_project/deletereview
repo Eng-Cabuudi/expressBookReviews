@@ -1,0 +1,23 @@
+﻿curl.exe -i -sS -b cookies.txt -X DELETE http://localhost:5000/customer/auth/review/1
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 42
+ETag: W/"2a-JtTV5/Y/edDhCQCUh0krXH+3A0o"
+Date: Mon, 26 Oct 2026 13:20:33 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"message":"Review deleted successfully."}
+
+curl.exe -i -sS http://localhost:5000/review/1
+HTTP/1.1 200 OK
+X-Powered-By: Express
+Content-Type: application/json; charset=utf-8
+Content-Length: 45
+ETag: W/"2d-3szTgk4htyU28+p1iRxm38Y/Ols"
+Date: Mon, 26 Oct 2026 13:20:33 GMT
+Connection: keep-alive
+Keep-Alive: timeout=5
+
+{"message":"No reviews found for this book."}

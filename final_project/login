@@ -1,0 +1,2 @@
+﻿curl.exe -sS -c cookies.txt -b cookies.txt -X POST http://localhost:5000/customer/login -H "Content-Type: application/json" --data-binary "@register-body.json"
+{"message":"User successfully logged in."}
