@@ -76,6 +76,7 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     message: exists
       ? "Review updated successfully."
       : "Review added successfully.",
+    reviews: books[isbn].reviews,
   });
 });
 

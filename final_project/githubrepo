@@ -1,2 +1,2 @@
-﻿curl.exe -sS https://api.github.com/repos/Eng-Cabuudi/expressBookReviews | ConvertFrom-Json | ForEach-Object { $_.parent.full_name }
-ibm-developer-skills-network/expressBookReviews
+﻿curl -s https://api.github.com/repos/Eng-Cabuudi/expressBookReviews | jq '.parent.full_name'
+"ibm-developer-skills-network/expressBookReviews"

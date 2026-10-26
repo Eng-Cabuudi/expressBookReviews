@@ -1,9 +1,12 @@
 const express = require("express");
+const axios = require("axios");
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
 
 const public_users = express.Router();
+const BOOKS_API_URL =
+  process.env.BOOKS_API_URL || "http://127.0.0.1:5000/_internal/books";
 
 // Task 6: Register a new user
 public_users.post("/register", (req, res) => {
@@ -29,14 +32,19 @@ public_users.post("/register", (req, res) => {
   users.push({ username, password });
 
   return res.status(201).json({
-    message: "User successfully registered.",
+    message: "User successfully registered. Now you can login",
   });
+});
+
+// Internal data endpoint used by the Axios based public search routes.
+public_users.get("/_internal/books", (req, res) => {
+  return res.status(200).json(books);
 });
 
 // Task 10: Get all books asynchronously with async/await
 public_users.get("/", async function (req, res) {
   try {
-    const allBooks = await Promise.resolve(books);
+    const { data: allBooks } = await axios.get(BOOKS_API_URL);
     return res.status(200).json(allBooks);
   } catch (error) {
     return res.status(500).json({
@@ -49,8 +57,10 @@ public_users.get("/", async function (req, res) {
 public_users.get("/isbn/:isbn", function (req, res) {
   const isbn = req.params.isbn;
 
-  Promise.resolve(books[isbn])
-    .then((book) => {
+  axios
+    .get(BOOKS_API_URL)
+    .then(({ data: allBooks }) => {
+      const book = allBooks[isbn];
       if (!book) {
         return res.status(404).json({
           message: "Book not found.",
@@ -72,7 +82,7 @@ public_users.get("/author/:author", async function (req, res) {
   const result = {};
 
   try {
-    const allBooks = await Promise.resolve(books);
+    const { data: allBooks } = await axios.get(BOOKS_API_URL);
     Object.keys(allBooks).forEach((isbn) => {
       if (allBooks[isbn].author.toLowerCase() === author.toLowerCase()) {
         result[isbn] = allBooks[isbn];
@@ -91,14 +101,12 @@ public_users.get("/author/:author", async function (req, res) {
 public_users.get("/title/:title", function (req, res) {
   const title = req.params.title;
 
-  Promise.resolve(books)
-    .then((allBooks) => {
-      const result = {};
-      Object.keys(allBooks).forEach((isbn) => {
-        if (allBooks[isbn].title.toLowerCase() === title.toLowerCase()) {
-          result[isbn] = allBooks[isbn];
-        }
-      });
+  axios
+    .get(BOOKS_API_URL)
+    .then(({ data: allBooks }) => {
+      const result = Object.entries(allBooks)
+        .filter(([, book]) => book.title.toLowerCase() === title.toLowerCase())
+        .map(([isbn, book]) => ({ isbn, ...book }));
 
       return res.status(200).json(result);
     })
